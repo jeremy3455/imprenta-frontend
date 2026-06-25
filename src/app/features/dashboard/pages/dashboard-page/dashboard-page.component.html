@@ -4,15 +4,25 @@
     <p>Bienvenido al sistema de gestión de Imprenta</p>
   </header>
 
-  <section class="dashboard__stats">
-    @for (stat of stats; track stat.label) {
-      <div class="stat-card">
-        <span class="stat-card__icon">{{ stat.icon }}</span>
-        <span class="stat-card__value">{{ stat.value }}</span>
-        <span class="stat-card__label">{{ stat.label }}</span>
-      </div>
-    }
-  </section>
+  @if (loading) {
+    <div class="dashboard__loading">
+      <p>Cargando estadísticas...</p>
+    </div>
+  } @else if (hasError) {
+    <div class="dashboard__error">
+      <p>Error al cargar los datos. Intenta nuevamente.</p>
+    </div>
+  } @else {
+    <section class="dashboard__stats">
+      @for (stat of stats; track stat.label) {
+        <div class="stat-card">
+          <span class="stat-card__icon">{{ stat.icon }}</span>
+          <span class="stat-card__value">{{ stat.value }}</span>
+          <span class="stat-card__label">{{ stat.label }}</span>
+        </div>
+      }
+    </section>
+  }
 
   <section class="dashboard__content">
     <div class="card">

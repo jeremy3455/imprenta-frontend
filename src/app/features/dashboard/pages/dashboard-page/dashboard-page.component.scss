@@ -17,6 +17,31 @@
     }
   }
 
+  &__loading,
+  &__error {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+
+    p {
+      color: #888;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+  }
+
+  &__error {
+    border: 1px solid #fca5a5;
+    background: #fef2f2;
+
+    p {
+      color: #dc2626;
+    }
+  }
+
   &__stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
