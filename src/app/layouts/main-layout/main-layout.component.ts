@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 /**
  * Layout principal de la aplicación para usuarios autenticados.
@@ -15,6 +16,9 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './main-layout.component.scss',
 })
 export class MainLayoutComponent {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+
   /** Elementos de navegación del sidebar */
   readonly navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: '📊' },
@@ -22,4 +26,12 @@ export class MainLayoutComponent {
     { path: '/pedidos', label: 'Pedidos', icon: '📋' },
     { path: '/productos', label: 'Productos', icon: '🖨️' },
   ];
+
+  /**
+   * Cierra la sesión del usuario y redirige al login.
+   */
+  onLogout(): void {
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
+  }
 }

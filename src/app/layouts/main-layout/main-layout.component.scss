@@ -57,6 +57,15 @@
       border-right: 3px solid #667eea;
     }
 
+    &--btn {
+      background: none;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
     &-icon {
       font-size: 1.2rem;
       width: 24px;

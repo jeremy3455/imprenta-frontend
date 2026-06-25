@@ -3,6 +3,12 @@
     <h1 class="login-card__title">Imprenta</h1>
     <p class="login-card__subtitle">Inicia sesión para continuar</p>
 
+    @if (errorMessage) {
+      <div class="alert alert--error">
+        {{ errorMessage }}
+      </div>
+    }
+
     <form (ngSubmit)="onLogin()" class="login-form">
       <div class="form-field">
         <label for="email">Correo electrónico</label>
@@ -11,8 +17,9 @@
           type="email"
           [(ngModel)]="email"
           name="email"
-          placeholder="usuario@ejemplo.com"
+          placeholder="admin@imprenta.com"
           required
+          [disabled]="loading"
         />
       </div>
 
@@ -25,10 +32,17 @@
           name="password"
           placeholder="••••••••"
           required
+          [disabled]="loading"
         />
       </div>
 
-      <button type="submit" class="login-form__btn">Ingresar</button>
+      <button type="submit" class="login-form__btn" [disabled]="loading">
+        {{ loading ? 'Ingresando...' : 'Ingresar' }}
+      </button>
     </form>
+
+    <p class="login-card__hint">
+      Usuario: <strong>admin@imprenta.com</strong> / Contraseña: <strong>Admin123!</strong>
+    </p>
   </div>
 </div>

@@ -1,29 +1,29 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 /**
  * Guard de autenticación que protege las rutas privadas del módulo principal.
+ * Verifica la existencia de un token JWT válido en localStorage.
  * Redirige al login si el usuario no está autenticado.
  */
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private readonly router: Router) {}
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   /**
-   * Verifica si el usuario está autenticado consultando el localStorage.
-   * Si no lo está, redirige a la página de login.
-   * @returns true si el usuario está autenticado, false en caso contrario
+   * Verifica si el usuario está autenticado mediante el AuthService.
+   * @returns true si hay sesión activa, false en caso contrario
    */
   canActivate(): boolean {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-
-    if (!isAuthenticated) {
-      this.router.navigate(['/auth/login']);
-      return false;
+    if (this.authService.isAuthenticated()) {
+      return true;
     }
 
-    return true;
+    this.router.navigate(['/auth/login']);
+    return false;
   }
 }
