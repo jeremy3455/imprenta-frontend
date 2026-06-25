@@ -1,0 +1,28 @@
+<div class="dashboard">
+  <header class="dashboard__header">
+    <h1>Panel de Control</h1>
+    <p>Bienvenido al sistema de gestión de Imprenta</p>
+  </header>
+
+  <section class="dashboard__stats">
+    @for (stat of stats; track stat.label) {
+      <div class="stat-card">
+        <span class="stat-card__icon">{{ stat.icon }}</span>
+        <span class="stat-card__value">{{ stat.value }}</span>
+        <span class="stat-card__label">{{ stat.label }}</span>
+      </div>
+    }
+  </section>
+
+  <section class="dashboard__content">
+    <div class="card">
+      <h2>Actividad Reciente</h2>
+      <p>No hay actividad reciente para mostrar.</p>
+    </div>
+
+    <div class="card">
+      <h2>Próximos Vencimientos</h2>
+      <p>No hay pedidos próximos a vencer.</p>
+    </div>
+  </section>
+</div>

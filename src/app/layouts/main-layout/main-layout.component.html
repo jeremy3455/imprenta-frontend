@@ -1,0 +1,31 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <h2>Imprenta</h2>
+    </div>
+
+    <nav class="sidebar__nav">
+      @for (item of navItems; track item.path) {
+        <a
+          class="sidebar__link"
+          [routerLink]="item.path"
+          routerLinkActive="sidebar__link--active"
+        >
+          <span class="sidebar__link-icon">{{ item.icon }}</span>
+          <span class="sidebar__link-label">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar__footer">
+      <a class="sidebar__link" routerLink="/auth/login">
+        <span class="sidebar__link-icon">🚪</span>
+        <span class="sidebar__link-label">Cerrar Sesión</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet />
+  </main>
+</div>
