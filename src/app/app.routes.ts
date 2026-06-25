@@ -1,6 +1,12 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 
+/**
+ * Configuración de rutas de la aplicación con carga diferida (lazy loading).
+ * - /auth/* → layout de autenticación (público)
+ * - /*      → layout principal con sidebar (protegido por AuthGuard)
+ * - /**     → ruta comodín que redirige al dashboard
+ */
 export const routes: Routes = [
   {
     path: 'auth',
