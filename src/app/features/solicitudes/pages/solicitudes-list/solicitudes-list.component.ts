@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { SolicitudService, PagedResult } from '../../services/solicitud.service';
 import { SolicitudResumen, SolicitudDetalle } from '../../models/solicitud.model';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -7,7 +7,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 @Component({
   selector: 'app-solicitudes-list',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, DecimalPipe],
   templateUrl: './solicitudes-list.component.html',
   styleUrl: './solicitudes-list.component.scss',
 })
@@ -94,5 +94,10 @@ export class SolicitudesListComponent implements OnInit {
   labelEstado(e: string): string {
     const map: Record<string, string> = { Pendiente: 'Pendiente', Aprobada: 'Aprobada', Rechazada: 'Rechazada' };
     return map[e] || e;
+  }
+
+  labelFormaPago(v: string): string {
+    const map: Record<string, string> = { EFECTIVO: 'Efectivo', TRANSFERENCIA: 'Transferencia' };
+    return map[v] || v;
   }
 }

@@ -59,6 +59,19 @@
 
     <div class="card">
       <div class="form-field">
+        <label>Forma de pago</label>
+        <div class="radio-group">
+          <label class="radio-group__option">
+            <input type="radio" [(ngModel)]="formaPago" value="EFECTIVO" />
+            <span>Efectivo</span>
+          </label>
+          <label class="radio-group__option">
+            <input type="radio" [(ngModel)]="formaPago" value="TRANSFERENCIA" />
+            <span>Transferencia</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-field">
         <label>Observación (opcional)</label>
         <textarea [(ngModel)]="observacion" rows="2"></textarea>
       </div>

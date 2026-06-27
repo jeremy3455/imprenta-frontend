@@ -55,9 +55,23 @@
             </span>
           </div>
           <div class="info-grid__item">
+            <span class="info-grid__label">Forma de pago</span>
+            <span class="info-grid__value">{{ labelFormaPago(detalleSolicitud.formaPago) }}</span>
+          </div>
+          <div class="info-grid__item">
             <span class="info-grid__label">Fecha</span>
             <span class="info-grid__value">{{ detalleSolicitud.fechaSolicitud | date:'medium' }}</span>
           </div>
+          @if (detalleSolicitud.pedidoId) {
+            <div class="info-grid__item">
+              <span class="info-grid__label">Pedido generado</span>
+              <span class="info-grid__value">#{{ detalleSolicitud.pedidoId }}</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Total</span>
+              <span class="info-grid__value">${{ detalleSolicitud.montoTotal | number:'1.2-2' }}</span>
+            </div>
+          }
         </div>
         <h3 style="margin: 1.25rem 0 0.5rem; font-size: 0.95rem;">Productos solicitados</h3>
         <table class="table">

@@ -63,3 +63,23 @@
   flex-direction: column;
   gap: 1.25rem;
 }
+
+.radio-group {
+  display: flex;
+  gap: 2rem;
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+
+    input[type="radio"] {
+      width: 1rem;
+      height: 1rem;
+      accent-color: var(--color-accent);
+      cursor: pointer;
+    }
+  }
+}

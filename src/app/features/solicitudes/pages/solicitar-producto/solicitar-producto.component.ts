@@ -31,6 +31,7 @@ export class SolicitarProductoComponent implements OnInit {
   loading = true;
   submitting = false;
 
+  formaPago = 'EFECTIVO';
   observacion = '';
   productoSeleccionadoId = 0;
   cantidad = 1;
@@ -86,6 +87,7 @@ export class SolicitarProductoComponent implements OnInit {
     this.submitting = true;
     this.solicitudService
       .create({
+        formaPago: this.formaPago,
         observacion: this.observacion || undefined,
         items: this.items.map((i) => ({ productoId: i.productoId, cantidad: i.cantidad })),
       })

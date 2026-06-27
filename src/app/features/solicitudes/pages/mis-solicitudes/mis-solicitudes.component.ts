@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { SolicitudService, PagedResult } from '../../services/solicitud.service';
 import { SolicitudResumen, SolicitudDetalle } from '../../models/solicitud.model';
@@ -9,7 +9,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 @Component({
   selector: 'app-mis-solicitudes',
   standalone: true,
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, DecimalPipe, RouterLink],
   templateUrl: './mis-solicitudes.component.html',
   styleUrl: './mis-solicitudes.component.scss',
 })
@@ -64,5 +64,10 @@ export class MisSolicitudesComponent implements OnInit {
   labelEstado(e: string): string {
     const map: Record<string, string> = { Pendiente: 'Pendiente', Aprobada: 'Aprobada', Rechazada: 'Rechazada' };
     return map[e] || e;
+  }
+
+  labelFormaPago(v: string): string {
+    const map: Record<string, string> = { EFECTIVO: 'Efectivo', TRANSFERENCIA: 'Transferencia' };
+    return map[v] || v;
   }
 }

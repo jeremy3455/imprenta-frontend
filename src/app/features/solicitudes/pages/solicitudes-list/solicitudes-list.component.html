@@ -87,9 +87,23 @@
             </span>
           </div>
           <div class="info-grid__item">
+            <span class="info-grid__label">Forma de pago</span>
+            <span class="info-grid__value">{{ labelFormaPago(detalleSolicitud.formaPago) }}</span>
+          </div>
+          <div class="info-grid__item">
             <span class="info-grid__label">Fecha</span>
             <span class="info-grid__value">{{ detalleSolicitud.fechaSolicitud | date:'medium' }}</span>
           </div>
+          @if (detalleSolicitud.pedidoId) {
+            <div class="info-grid__item">
+              <span class="info-grid__label">Pedido generado</span>
+              <span class="info-grid__value">#{{ detalleSolicitud.pedidoId }}</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Total</span>
+              <span class="info-grid__value">${{ detalleSolicitud.montoTotal | number:'1.2-2' }}</span>
+            </div>
+          }
           @if (detalleSolicitud.observacion) {
             <div class="info-grid__item info-grid__item--full">
               <span class="info-grid__label">Observación</span>

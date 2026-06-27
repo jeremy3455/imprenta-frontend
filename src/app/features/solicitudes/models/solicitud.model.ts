@@ -14,6 +14,9 @@ export interface SolicitudDetalle {
   numeroCedulaRuc: string;
   clienteId: number;
   estado: string;
+  formaPago: string;
+  pedidoId?: number;
+  montoTotal?: number;
   observacion?: string;
   fechaSolicitud: string;
   items: SolicitudItem[];
@@ -28,6 +31,7 @@ export interface SolicitudItem {
 }
 
 export interface SolicitudCreate {
+  formaPago: string;
   observacion?: string;
   items: SolicitudCreateItem[];
 }
