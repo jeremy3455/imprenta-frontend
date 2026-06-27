@@ -102,13 +102,18 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
+        loadComponent: () =>
+          import('./features/home/home-redirect.component').then(
+            (m) => m.HomeRedirectComponent
+          ),
       },
     ],
   },
   {
     path: '**',
-    redirectTo: 'dashboard',
+    loadComponent: () =>
+      import('./features/home/home-redirect.component').then(
+        (m) => m.HomeRedirectComponent
+      ),
   },
 ];

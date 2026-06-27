@@ -119,7 +119,8 @@ export class LoginPageComponent {
       .subscribe({
         next: () => {
           this.notificationService.showSuccess('Bienvenido de nuevo.');
-          this.router.navigate(['/dashboard']);
+          const destino = this.authService.isCliente() ? '/mi-perfil' : '/dashboard';
+          this.router.navigate([destino]);
         },
         error: (err) => {
           this.otpError.set(true);
