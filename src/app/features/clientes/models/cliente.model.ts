@@ -1,59 +1,52 @@
 /**
  * Interfaz que representa los datos de un cliente devueltos por la API.
+ * Corresponde a la tabla Clientes de la base de datos SQL.
  */
 export interface Cliente {
-  /** Identificador único del cliente */
-  id: string;
-  /** Nombre completo del cliente */
-  nombre: string;
-  /** Correo electrónico */
-  email: string;
+  /** Identificador único del cliente (IDENTITY) */
+  id: number;
+  /** RUC del cliente (13 dígitos) */
+  ruc: string;
+  /** Razón social */
+  razonSocial: string;
+  /** Dirección física */
+  direccion?: string;
   /** Teléfono de contacto */
-  telefono: string;
-  /** Dirección completa en formato texto */
-  direccion: string;
-  /** Estado actual (Activo, Inactivo, Suspendido) */
-  status: string;
-  /** Fecha de creación del registro */
-  createdAt: string;
+  telefono?: string;
+  /** Correo electrónico */
+  email?: string;
+  /** Indica si el cliente está activo */
+  activo: boolean;
 }
 
 /**
  * DTO para crear un nuevo cliente.
  */
 export interface CreateClienteRequest {
-  /** Nombre completo */
-  nombre: string;
-  /** Correo electrónico */
-  email: string;
+  /** RUC del cliente (13 dígitos) */
+  ruc: string;
+  /** Razón social */
+  razonSocial: string;
+  /** Dirección física */
+  direccion?: string;
   /** Teléfono de contacto */
-  telefono: string;
-  /** Calle y número */
-  calle: string;
-  /** Ciudad */
-  ciudad: string;
-  /** Estado o provincia */
-  estado: string;
-  /** Código postal */
-  codigoPostal: string;
+  telefono?: string;
+  /** Correo electrónico */
+  email?: string;
 }
 
 /**
  * DTO para actualizar un cliente existente.
  */
 export interface UpdateClienteRequest {
-  /** Nombre completo */
-  nombre: string;
-  /** Correo electrónico */
-  email: string;
+  /** RUC del cliente (13 dígitos) */
+  ruc: string;
+  /** Razón social */
+  razonSocial: string;
+  /** Dirección física */
+  direccion?: string;
   /** Teléfono de contacto */
-  telefono: string;
-  /** Calle y número */
-  calle: string;
-  /** Ciudad */
-  ciudad: string;
-  /** Estado o provincia */
-  estado: string;
-  /** Código postal */
-  codigoPostal: string;
+  telefono?: string;
+  /** Correo electrónico */
+  email?: string;
 }

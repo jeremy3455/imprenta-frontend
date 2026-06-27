@@ -1,0 +1,32 @@
+// =============================================================================
+//  PERSONALIZA TUS COLORES AQUÍ
+//  Cambia solo los 3 colores principales y, si quieres, sus variantes pastel.
+//  El resto de la app tomará estos valores automáticamente.
+// =============================================================================
+
+:root {
+  /* ── Gama principal (3 colores) ─────────────────────────────────────────── */
+  --brand-primary: #e07a5f;   /* Terracota cálido — botones, enlaces activos */
+  --brand-secondary: #8b7ec8; /* Lavanda — sidebar, gradientes */
+  --brand-accent: #5bbfa3;    /* Menta — acentos, badges, detalles */
+
+  /* ── Tonos pastel (fondos suaves) ───────────────────────────────────────── */
+  --brand-primary-pastel: #faeae5;
+  --brand-secondary-pastel: #eeeaf9;
+  --brand-accent-pastel: #e0f5f0;
+
+  /* ── Opcional: intensidad del gradiente de fondo (login, botones) ──────── */
+  --gradient-angle: 135deg;
+}
+
+// Ejemplos de otras paletas (descomenta una y comenta la de arriba):
+//
+// Rosa + índigo + menta:
+//   --brand-primary: #f48fb1;
+//   --brand-secondary: #7986cb;
+//   --brand-accent: #4db6ac;
+//
+// Melocotón + ciruela + aguamarina:
+//   --brand-primary: #ffab91;
+//   --brand-secondary: #b39ddb;
+//   --brand-accent: #80cbc4;

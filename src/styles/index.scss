@@ -1,0 +1,19 @@
+// Punto de entrada de estilos compartidos.
+// Orden: tema → base → layout → componentes
+
+@use 'theme/custom';
+@use 'theme/tokens';
+
+@use 'base/reset';
+
+@use 'layout/page';
+@use 'layout/sidebar';
+
+@use 'components/buttons';
+@use 'components/forms';
+@use 'components/cards';
+@use 'components/login';
+@use 'components/tables';
+@use 'components/badges';
+@use 'components/empty-state';
+@use 'components/notifications';

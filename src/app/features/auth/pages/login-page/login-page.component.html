@@ -1,48 +1,117 @@
 <div class="login-container">
-  <div class="login-card">
-    <h1 class="login-card__title">Imprenta</h1>
-    <p class="login-card__subtitle">Inicia sesión para continuar</p>
+  <div class="login-container__orb login-container__orb--1" aria-hidden="true"></div>
+  <div class="login-container__orb login-container__orb--2" aria-hidden="true"></div>
+  <div class="login-container__orb login-container__orb--3" aria-hidden="true"></div>
 
-    @if (errorMessage) {
-      <div class="alert alert--error">
-        {{ errorMessage }}
+  <div class="login-card login-card--elevated">
+    <div class="login-card__brand login-animate login-animate--1">
+      <div class="login-card__logo">🖨️</div>
+      <h1 class="login-card__title">Imprenta</h1>
+      <p class="login-card__subtitle">
+        @if (step() === 'credentials') {
+          Inicia sesión para continuar
+        } @else {
+          Verifica tu identidad
+        }
+      </p>
+    </div>
+
+    <div class="login-steps login-animate login-animate--2" aria-label="Progreso de inicio de sesión">
+      <span class="login-steps__item" [class.login-steps__item--active]="step() === 'credentials'">
+        <span class="login-steps__number">1</span>
+        Credenciales
+      </span>
+      <span class="login-steps__line"></span>
+      <span class="login-steps__item" [class.login-steps__item--active]="step() === 'otp'">
+        <span class="login-steps__number">2</span>
+        Código OTP
+      </span>
+    </div>
+
+    @if (step() === 'credentials') {
+      <form (ngSubmit)="onRequestOtp()" class="login-form login-animate login-animate--3">
+        @if (credentialsError()) {
+          <p class="login-form__error" role="alert">{{ credentialsError() }}</p>
+        }
+
+        <div class="form-field">
+          <label for="email">Correo electrónico</label>
+          <input
+            id="email"
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder="admin@imprenta.com"
+            required
+            autocomplete="email"
+            [disabled]="loading()"
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="password">Contraseña</label>
+          <input
+            id="password"
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+            [disabled]="loading()"
+          />
+        </div>
+
+        <button type="submit" class="login-form__btn" [disabled]="loading()">
+          {{ loading() ? 'Enviando código...' : 'Continuar' }}
+        </button>
+      </form>
+    } @else {
+      <div class="login-otp login-animate login-animate--3">
+        <p class="login-otp__message">
+          Ingresa el código de 6 dígitos enviado a
+          <strong>{{ maskedEmail() }}</strong>
+        </p>
+
+        <app-otp-input
+          [(ngModel)]="otpCode"
+          name="otp"
+          [hasError]="otpError()"
+          [disabled]="loading()"
+          (ngModelChange)="onOtpChange($event)"
+          (completed)="onOtpCompleted($event)"
+        />
+
+        @if (expiresInSeconds() > 0) {
+          <p class="login-otp__timer">
+            El código expira en {{ expiresInSeconds() / 60 | number: '1.0-0' }} min
+          </p>
+        }
+
+        <button
+          type="button"
+          class="login-form__btn"
+          [disabled]="loading() || otpCode.length < 6"
+          (click)="onVerifyOtp()"
+        >
+          {{ loading() ? 'Verificando...' : 'Verificar e ingresar' }}
+        </button>
+
+        <div class="login-otp__actions">
+          <button type="button" class="login-otp__link" (click)="onResendOtp()" [disabled]="loading()">
+            Reenviar código
+          </button>
+          <button type="button" class="login-otp__link" (click)="backToCredentials()" [disabled]="loading()">
+            ← Cambiar correo
+          </button>
+        </div>
       </div>
     }
 
-    <form (ngSubmit)="onLogin()" class="login-form">
-      <div class="form-field">
-        <label for="email">Correo electrónico</label>
-        <input
-          id="email"
-          type="email"
-          [(ngModel)]="email"
-          name="email"
-          placeholder="admin@imprenta.com"
-          required
-          [disabled]="loading"
-        />
-      </div>
-
-      <div class="form-field">
-        <label for="password">Contraseña</label>
-        <input
-          id="password"
-          type="password"
-          [(ngModel)]="password"
-          name="password"
-          placeholder="••••••••"
-          required
-          [disabled]="loading"
-        />
-      </div>
-
-      <button type="submit" class="login-form__btn" [disabled]="loading">
-        {{ loading ? 'Ingresando...' : 'Ingresar' }}
-      </button>
-    </form>
-
-    <p class="login-card__hint">
-      Usuario: <strong>admin@imprenta.com</strong> / Contraseña: <strong>Admin123!</strong>
+    <p class="login-card__hint login-animate login-animate--4">
+      Prueba: <strong>admin@imprenta.com</strong> / <strong>Admin123!</strong>
+      <br />
+      OTP de prueba: <strong>123456</strong>
     </p>
   </div>
 </div>

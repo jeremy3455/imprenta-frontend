@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 /**
  * Layout principal de la aplicación para usuarios autenticados.
@@ -18,6 +19,7 @@ import { AuthService } from '../../core/services/auth.service';
 export class MainLayoutComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly notificationService = inject(NotificationService);
 
   /** Elementos de navegación del sidebar */
   readonly navItems = [
@@ -32,6 +34,7 @@ export class MainLayoutComponent {
    */
   onLogout(): void {
     this.authService.logout();
+    this.notificationService.showInfo('Sesión cerrada correctamente.');
     this.router.navigate(['/auth/login']);
   }
 }

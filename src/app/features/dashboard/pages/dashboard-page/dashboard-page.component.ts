@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
 import { DashboardStats } from '../../models/dashboard-stats.model';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 /**
  * Página principal del panel de control.
@@ -15,12 +16,10 @@ import { DashboardStats } from '../../models/dashboard-stats.model';
 })
 export class DashboardPageComponent implements OnInit {
   private readonly dashboardService = inject(DashboardService);
+  private readonly notificationService = inject(NotificationService);
 
   /** Indica si los datos están cargando */
   loading = true;
-
-  /** Indica si ocurrió un error al cargar */
-  hasError = false;
 
   /** Lista de tarjetas de estadísticas con label, valor numérico e ícono */
   stats = [
@@ -40,7 +39,6 @@ export class DashboardPageComponent implements OnInit {
    */
   private loadStats(): void {
     this.loading = true;
-    this.hasError = false;
 
     this.dashboardService.getStats().subscribe({
       next: (data: DashboardStats) => {
@@ -53,7 +51,9 @@ export class DashboardPageComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.hasError = true;
+        this.notificationService.showError(
+          'Error al cargar las estadísticas. Intenta nuevamente.'
+        );
         this.loading = false;
       },
     });

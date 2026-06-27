@@ -1,0 +1,67 @@
+.btn {
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity var(--transition-normal), transform var(--transition-fast);
+
+  &--primary {
+    background: var(--gradient-brand);
+    color: var(--color-text-on-primary);
+
+    &:hover:not(:disabled) {
+      opacity: 0.92;
+    }
+  }
+
+  &--secondary {
+    background: var(--brand-secondary-pastel);
+    color: var(--color-text);
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--brand-secondary) 25%, white);
+    }
+  }
+
+  &--accent {
+    background: var(--brand-accent);
+    color: var(--color-text-on-primary);
+
+    &:hover:not(:disabled) {
+      opacity: 0.92;
+    }
+  }
+
+  &--danger {
+    background: transparent;
+    color: var(--color-error-text);
+
+    &:hover:not(:disabled) {
+      background: var(--color-error-bg);
+    }
+  }
+
+  &--sm {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+.login-form__btn {
+  @extend .btn;
+  @extend .btn--primary;
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 1rem;
+}

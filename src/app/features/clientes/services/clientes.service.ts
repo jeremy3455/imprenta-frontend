@@ -27,7 +27,7 @@ export class ClientesService {
    * @param id - Identificador único del cliente
    * @returns Observable con el cliente encontrado
    */
-  getById(id: string): Observable<Cliente> {
+  getById(id: number): Observable<Cliente> {
     return this.api.get<Cliente>(`${this.endpoint}/${id}`);
   }
 
@@ -46,7 +46,7 @@ export class ClientesService {
    * @param data - Nuevos datos del cliente
    * @returns Observable con el cliente actualizado
    */
-  update(id: string, data: UpdateClienteRequest): Observable<Cliente> {
+  update(id: number, data: UpdateClienteRequest): Observable<Cliente> {
     return this.api.put<Cliente>(`${this.endpoint}/${id}`, data);
   }
 
@@ -55,7 +55,7 @@ export class ClientesService {
    * @param id - Id del cliente a eliminar
    * @returns Observable vacío
    */
-  delete(id: string): Observable<void> {
+  delete(id: number): Observable<void> {
     return this.api.delete<void>(`${this.endpoint}/${id}`);
   }
 }

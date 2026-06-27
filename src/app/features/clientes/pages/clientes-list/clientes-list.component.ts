@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ClientesService } from '../../services/clientes.service';
 import { Cliente, CreateClienteRequest } from '../../models/cliente.model';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 /**
  * Página de listado de clientes.
@@ -18,6 +19,7 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state/e
 })
 export class ClientesListComponent implements OnInit {
   private readonly clientesService = inject(ClientesService);
+  private readonly notificationService = inject(NotificationService);
 
   /** Lista de clientes obtenida desde la API */
   clientes: Cliente[] = [];
@@ -25,24 +27,16 @@ export class ClientesListComponent implements OnInit {
   /** Indica si los datos están cargando */
   loading = true;
 
-  /** Indica si ocurrió un error */
-  hasError = false;
-
-  /** Mensaje de error */
-  errorMessage = '';
-
   /** Controla la visibilidad del formulario de creación */
   showCreateForm = false;
 
   /** Modelo para el formulario de nuevo cliente */
   nuevoCliente: CreateClienteRequest = {
-    nombre: '',
-    email: '',
+    ruc: '',
+    razonSocial: '',
+    direccion: '',
     telefono: '',
-    calle: '',
-    ciudad: '',
-    estado: '',
-    codigoPostal: '',
+    email: '',
   };
 
   ngOnInit(): void {
@@ -54,7 +48,6 @@ export class ClientesListComponent implements OnInit {
    */
   loadClientes(): void {
     this.loading = true;
-    this.hasError = false;
 
     this.clientesService.getAll().subscribe({
       next: (data) => {
@@ -62,8 +55,9 @@ export class ClientesListComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.hasError = true;
-        this.errorMessage = err.message || 'Error al cargar los clientes.';
+        this.notificationService.showError(
+          err.message || 'Error al cargar los clientes.'
+        );
         this.loading = false;
       },
     });
@@ -85,13 +79,15 @@ export class ClientesListComponent implements OnInit {
   createCliente(): void {
     this.clientesService.create(this.nuevoCliente).subscribe({
       next: () => {
+        this.notificationService.showSuccess('Cliente creado correctamente.');
         this.loadClientes();
         this.showCreateForm = false;
         this.resetForm();
       },
       error: (err) => {
-        this.hasError = true;
-        this.errorMessage = err.message || 'Error al crear el cliente.';
+        this.notificationService.showError(
+          err.message || 'Error al crear el cliente.'
+        );
       },
     });
   }
@@ -100,13 +96,17 @@ export class ClientesListComponent implements OnInit {
    * Elimina un cliente por su Id con confirmación.
    * @param id - Identificador del cliente a eliminar
    */
-  deleteCliente(id: string): void {
+  deleteCliente(id: number): void {
     if (confirm('¿Estás seguro de eliminar este cliente?')) {
       this.clientesService.delete(id).subscribe({
-        next: () => this.loadClientes(),
+        next: () => {
+          this.notificationService.showSuccess('Cliente eliminado correctamente.');
+          this.loadClientes();
+        },
         error: (err) => {
-          this.hasError = true;
-          this.errorMessage = err.message || 'Error al eliminar el cliente.';
+          this.notificationService.showError(
+            err.message || 'Error al eliminar el cliente.'
+          );
         },
       });
     }
@@ -117,13 +117,11 @@ export class ClientesListComponent implements OnInit {
    */
   private resetForm(): void {
     this.nuevoCliente = {
-      nombre: '',
-      email: '',
+      ruc: '',
+      razonSocial: '',
+      direccion: '',
       telefono: '',
-      calle: '',
-      ciudad: '',
-      estado: '',
-      codigoPostal: '',
+      email: '',
     };
   }
 }

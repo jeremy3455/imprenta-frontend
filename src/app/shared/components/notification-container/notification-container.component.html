@@ -1,0 +1,26 @@
+<aside class="notification-panel" aria-live="polite" aria-label="Notificaciones">
+  @for (notification of notifications(); track notification.id) {
+    <div
+      class="notification notification--{{ notification.type }}"
+      role="alert"
+    >
+      <div class="notification__icon" aria-hidden="true">
+        {{ getIcon(notification.type) }}
+      </div>
+
+      <div class="notification__body">
+        <p class="notification__title">{{ getTitle(notification) }}</p>
+        <p class="notification__message">{{ notification.message }}</p>
+      </div>
+
+      <button
+        type="button"
+        class="notification__close"
+        (click)="dismiss(notification.id)"
+        aria-label="Cerrar notificación"
+      >
+        ×
+      </button>
+    </div>
+  }
+</aside>

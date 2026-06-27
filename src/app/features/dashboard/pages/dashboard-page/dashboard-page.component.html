@@ -1,16 +1,12 @@
-<div class="dashboard">
-  <header class="dashboard__header">
+<div class="dashboard page-section">
+  <header class="dashboard__header page-header">
     <h1>Panel de Control</h1>
     <p>Bienvenido al sistema de gestión de Imprenta</p>
   </header>
 
   @if (loading) {
-    <div class="dashboard__loading">
+    <div class="dashboard__loading page-loading">
       <p>Cargando estadísticas...</p>
-    </div>
-  } @else if (hasError) {
-    <div class="dashboard__error">
-      <p>Error al cargar los datos. Intenta nuevamente.</p>
     </div>
   } @else {
     <section class="dashboard__stats">

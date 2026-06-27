@@ -1,0 +1,145 @@
+.notification-panel {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: min(22rem, calc(100vw - 2rem));
+  pointer-events: none;
+}
+
+.notification {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-sm);
+  border-left: 4px solid transparent;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  pointer-events: auto;
+  animation: notification-slide-in 0.28s ease-out;
+
+  &__icon {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0 0 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    word-break: break-word;
+  }
+
+  &__close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 0;
+    color: inherit;
+    transition: opacity var(--transition-fast);
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &--success {
+    border-left-color: var(--color-success);
+    background: var(--color-success-bg);
+
+    .notification__icon {
+      background: color-mix(in srgb, var(--color-success) 25%, white);
+      color: var(--color-success-text);
+    }
+
+    .notification__title,
+    .notification__message {
+      color: var(--color-success-text);
+    }
+  }
+
+  &--error {
+    border-left-color: var(--color-error);
+    background: var(--color-error-bg);
+
+    .notification__icon {
+      background: color-mix(in srgb, var(--color-error) 20%, white);
+      color: var(--color-error-text);
+    }
+
+    .notification__title,
+    .notification__message {
+      color: var(--color-error-text);
+    }
+  }
+
+  &--warning {
+    border-left-color: var(--color-warning);
+    background: var(--color-warning-bg);
+
+    .notification__icon {
+      background: color-mix(in srgb, var(--color-warning) 25%, white);
+      color: var(--color-warning-text);
+    }
+
+    .notification__title,
+    .notification__message {
+      color: var(--color-warning-text);
+    }
+  }
+
+  &--info {
+    border-left-color: var(--color-info);
+    background: var(--color-info-bg);
+
+    .notification__icon {
+      background: color-mix(in srgb, var(--color-info) 20%, white);
+      color: var(--color-info-text);
+    }
+
+    .notification__title,
+    .notification__message {
+      color: var(--color-info-text);
+    }
+  }
+}
+
+@keyframes notification-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
