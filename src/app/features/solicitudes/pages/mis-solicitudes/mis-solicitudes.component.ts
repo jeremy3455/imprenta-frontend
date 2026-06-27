@@ -1,10 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { SolicitudService, PagedResult } from '../../services/solicitud.service';
 import { SolicitudResumen, SolicitudDetalle } from '../../models/solicitud.model';
 import { NotificationService } from '../../../../core/services/notification.service';
-import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({

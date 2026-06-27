@@ -5,7 +5,7 @@
   </header>
 
   <div class="filters">
-    <select (change)="onFilterChange($any($event.target).value)" class="form-select">
+    <select (change)="onFilterChange($any($event.target).value)">
       <option value="">Todos los estados</option>
       <option value="Pendiente">Pendiente</option>
       <option value="Aprobada">Aprobada</option>
@@ -16,49 +16,61 @@
   @if (loading) {
     <div class="page-loading"><p>Cargando solicitudes...</p></div>
   } @else if (solicitudes.length === 0) {
-    <div class="empty-state"><p>No hay solicitudes registradas.</p></div>
-  } @else {
-    <table class="table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Cliente</th>
-          <th>Estado</th>
-          <th>Items</th>
-          <th>Fecha</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (s of solicitudes; track s.id) {
-          <tr>
-            <td>{{ s.id }}</td>
-            <td>{{ s.razonSocialCliente }}</td>
-            <td><span class="badge badge--{{ s.estado }}">{{ labelEstado(s.estado) }}</span></td>
-            <td>{{ s.cantidadItems }}</td>
-            <td>{{ s.fechaSolicitud | date:'short' }}</td>
-            <td><button class="btn btn--sm" (click)="verDetalle(s.id)">Ver</button></td>
-          </tr>
-        }
-      </tbody>
-    </table>
-
-    <div class="pagination">
-      <button class="btn btn--sm" [disabled]="page <= 1" (click)="onPageChange(page - 1)">Anterior</button>
-      <span>Página {{ page }} de {{ totalPages() }}</span>
-      <button class="btn btn--sm" [disabled]="page >= totalPages()" (click)="onPageChange(page + 1)">Siguiente</button>
+    <div class="empty-state">
+      <div class="empty-state__icon">📨</div>
+      <h2 class="empty-state__title">No hay solicitudes</h2>
+      <p class="empty-state__message">Aún no hay solicitudes de clientes.</p>
     </div>
+  } @else {
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Estado</th>
+            <th>Items</th>
+            <th>Fecha</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of solicitudes; track s.id) {
+            <tr>
+              <td>{{ s.id }}</td>
+              <td>{{ s.razonSocialCliente }}</td>
+              <td><span class="badge badge--{{ s.estado }}">{{ labelEstado(s.estado) }}</span></td>
+              <td>{{ s.cantidadItems }}</td>
+              <td>{{ s.fechaSolicitud | date:'short' }}</td>
+              <td><button class="btn btn--sm btn--secondary" (click)="verDetalle(s.id)">Ver</button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (totalPages() > 1) {
+      <div class="pagination">
+        <button class="btn btn--sm" [disabled]="page <= 1" (click)="onPageChange(page - 1)">Anterior</button>
+        <span style="font-size: 0.85rem; color: var(--color-text-muted);">Página {{ page }} de {{ totalPages() }}</span>
+        <button class="btn btn--sm" [disabled]="page >= totalPages()" (click)="onPageChange(page + 1)">Siguiente</button>
+      </div>
+    }
   }
 </div>
 
 @if (showDetalle && detalleSolicitud) {
   <div class="modal-overlay" (click)="cerrarDetalle()">
-    <div class="modal" (click)="$event.stopPropagation()">
-      <div class="modal__header">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-dialog__header">
         <h2>Solicitud #{{ detalleSolicitud.id }}</h2>
-        <button class="modal__close" (click)="cerrarDetalle()">&times;</button>
+        <button class="modal-dialog__close" (click)="cerrarDetalle()" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
       </div>
-      <div class="modal__body">
+      <div class="modal-dialog__body">
         <div class="info-grid">
           <div class="info-grid__item">
             <span class="info-grid__label">Cliente</span>
@@ -86,7 +98,7 @@
           }
         </div>
 
-        <h3 style="margin: 1rem 0 0.5rem; font-size: 0.9rem;">Productos solicitados</h3>
+        <h3 style="margin: 1.25rem 0 0.5rem; font-size: 0.95rem;">Productos solicitados</h3>
         <table class="table">
           <thead>
             <tr><th>Producto</th><th>Cantidad</th><th>Observación</th></tr>

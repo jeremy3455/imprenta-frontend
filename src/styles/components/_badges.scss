@@ -46,4 +46,19 @@
     background: #fef3c7;
     color: #92400e;
   }
+
+  &--pendiente {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  &--aprobada {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  &--rechazada {
+    background: #fee2e2;
+    color: #991b1b;
+  }
 }
