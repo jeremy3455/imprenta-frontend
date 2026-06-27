@@ -13,9 +13,9 @@
         <div class="form-field" style="flex: 1; min-width: 200px;">
           <label>Producto</label>
           <select [(ngModel)]="productoSeleccionadoId">
-            <option [value]="0">Selecciona un producto</option>
+            <option [ngValue]="0">Selecciona un producto</option>
             @for (p of productos; track p.id) {
-              <option [value]="p.id">{{ p.nombre }} — {{ p.categoriaNombre }}</option>
+              <option [ngValue]="p.id">{{ p.nombre }} — {{ p.categoriaNombre }}</option>
             }
           </select>
         </div>
