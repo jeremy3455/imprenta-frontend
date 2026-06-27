@@ -43,4 +43,8 @@ export class SolicitudService {
   marcarTodasLeidas(): Observable<void> {
     return this.api.patch<void>('/notificaciones/leer-todas', {});
   }
+
+  convertirAPedido(id: number): Observable<any> {
+    return this.api.post<any>(`/solicitudes/${id}/convertir-pedido`, {});
+  }
 }

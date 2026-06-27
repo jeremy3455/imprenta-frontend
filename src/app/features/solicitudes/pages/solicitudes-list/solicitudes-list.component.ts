@@ -23,6 +23,7 @@ export class SolicitudesListComponent implements OnInit {
   filtroEstado = '';
   detalleSolicitud: SolicitudDetalle | null = null;
   showDetalle = false;
+  convirtiendo = false;
 
   ngOnInit(): void {
     this.loadSolicitudes();
@@ -63,6 +64,21 @@ export class SolicitudesListComponent implements OnInit {
         this.showDetalle = true;
       },
       error: () => this.notificationService.showError('Error al cargar detalle.'),
+    });
+  }
+
+  convertirAPedido(id: number): void {
+    this.convirtiendo = true;
+    this.solicitudService.convertirAPedido(id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess('Solicitud convertida a pedido correctamente.');
+        this.cerrarDetalle();
+        this.loadSolicitudes();
+      },
+      error: (err) => {
+        this.notificationService.showError(err.error?.message || 'Error al convertir la solicitud.');
+        this.convirtiendo = false;
+      },
     });
   }
 

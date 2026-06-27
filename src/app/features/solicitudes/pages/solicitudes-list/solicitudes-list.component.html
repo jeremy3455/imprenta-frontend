@@ -113,6 +113,14 @@
             }
           </tbody>
         </table>
+
+        @if (detalleSolicitud.estado === 'Pendiente') {
+          <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: center;">
+            <button class="btn btn--primary" (click)="convertirAPedido(detalleSolicitud.id)" [disabled]="convirtiendo">
+              {{ convirtiendo ? 'Convirtiendo...' : 'Convertir a Pedido' }}
+            </button>
+          </div>
+        }
       </div>
     </div>
   </div>
