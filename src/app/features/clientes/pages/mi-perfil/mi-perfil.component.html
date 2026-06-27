@@ -1,0 +1,39 @@
+<div class="page-section">
+  <header class="page-header">
+    <h1>Mi Perfil</h1>
+    <p>Tus datos registrados en la imprenta</p>
+  </header>
+
+  @if (loading) {
+    <div class="page-loading"><p>Cargando tu perfil...</p></div>
+  } @else if (cliente) {
+    <div class="card">
+      <div class="info-grid">
+        <div class="info-grid__item">
+          <span class="info-grid__label">RUC / Cédula</span>
+          <span class="info-grid__value">{{ cliente.numeroCedulaRuc }}</span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Razón Social</span>
+          <span class="info-grid__value">{{ cliente.razonSocial }}</span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Dirección</span>
+          <span class="info-grid__value">{{ cliente.direccion || '-' }}</span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Email</span>
+          <span class="info-grid__value">{{ cliente.email || '-' }}</span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Teléfono</span>
+          <span class="info-grid__value">{{ cliente.telefono || '-' }}</span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Tipo Contribuyente</span>
+          <span class="info-grid__value">{{ cliente.tipoContribuyente || '-' }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

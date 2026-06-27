@@ -1,12 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
+import { RoleGuard } from './core/guards/role.guard';
 
-/**
- * Configuración de rutas de la aplicación con carga diferida (lazy loading).
- * - /auth/* → layout de autenticación (público)
- * - /*      → layout principal con sidebar (protegido por AuthGuard)
- * - /**     → ruta comodín que redirige al dashboard
- */
 export const routes: Routes = [
   {
     path: 'auth',
@@ -43,6 +38,7 @@ export const routes: Routes = [
           import(
             './features/dashboard/pages/dashboard-page/dashboard-page.component'
           ).then((m) => m.DashboardPageComponent),
+        canActivate: [RoleGuard],
       },
       {
         path: 'clientes',
@@ -50,6 +46,7 @@ export const routes: Routes = [
           import(
             './features/clientes/pages/clientes-list/clientes-list.component'
           ).then((m) => m.ClientesListComponent),
+        canActivate: [RoleGuard],
       },
       {
         path: 'productos',
@@ -57,9 +54,47 @@ export const routes: Routes = [
           import(
             './features/productos/pages/productos-list/productos-list.component'
           ).then((m) => m.ProductosListComponent),
+        canActivate: [RoleGuard],
       },
       {
         path: 'pedidos',
+        loadComponent: () =>
+          import(
+            './features/pedidos/pages/pedidos-list/pedidos-list.component'
+          ).then((m) => m.PedidosListComponent),
+        canActivate: [RoleGuard],
+      },
+      {
+        path: 'solicitudes',
+        loadComponent: () =>
+          import(
+            './features/solicitudes/pages/solicitudes-list/solicitudes-list.component'
+          ).then((m) => m.SolicitudesListComponent),
+        canActivate: [RoleGuard],
+      },
+      {
+        path: 'mi-perfil',
+        loadComponent: () =>
+          import(
+            './features/clientes/pages/mi-perfil/mi-perfil.component'
+          ).then((m) => m.MiPerfilComponent),
+      },
+      {
+        path: 'solicitar',
+        loadComponent: () =>
+          import(
+            './features/solicitudes/pages/solicitar-producto/solicitar-producto.component'
+          ).then((m) => m.SolicitarProductoComponent),
+      },
+      {
+        path: 'mis-solicitudes',
+        loadComponent: () =>
+          import(
+            './features/solicitudes/pages/mis-solicitudes/mis-solicitudes.component'
+          ).then((m) => m.MisSolicitudesComponent),
+      },
+      {
+        path: 'mis-pedidos',
         loadComponent: () =>
           import(
             './features/pedidos/pages/pedidos-list/pedidos-list.component'

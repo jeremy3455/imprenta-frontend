@@ -1,14 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { ApiService } from '../../core/services/api.service';
 
-/**
- * Layout principal de la aplicación para usuarios autenticados.
- * Incluye un sidebar de navegación lateral con enlaces a las
- * secciones principales y un área de contenido donde se renderizan
- * las páginas hijas mediante router-outlet.
- */
 @Component({
   selector: 'app-main-layout',
   standalone: true,
@@ -16,25 +11,51 @@ import { NotificationService } from '../../core/services/notification.service';
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly notificationService = inject(NotificationService);
+  private readonly api = inject(ApiService);
 
-  /** Elementos de navegación del sidebar */
-  readonly navItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: '📊' },
-    { path: '/clientes', label: 'Clientes', icon: '👥' },
-    { path: '/pedidos', label: 'Pedidos', icon: '📋' },
-    { path: '/productos', label: 'Productos', icon: '🖨️' },
+  readonly isAdmin = this.authService.isAdmin();
+  readonly isCliente = this.authService.isCliente();
+  readonly nombreUsuario = this.authService.getUserData()?.nombre ?? '';
+  notificacionesNoLeidas = 0;
+
+  readonly adminNavItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: '\u{1F4CA}' },
+    { path: '/clientes', label: 'Clientes', icon: '\u{1F465}' },
+    { path: '/pedidos', label: 'Pedidos', icon: '\u{1F4CB}' },
+    { path: '/productos', label: 'Productos', icon: '\u{1F5A8}\u{FE0F}' },
+    { path: '/solicitudes', label: 'Solicitudes', icon: '\u{1F4E9}' },
   ];
 
-  /**
-   * Cierra la sesión del usuario y redirige al login.
-   */
+  readonly clienteNavItems = [
+    { path: '/mi-perfil', label: 'Mi Perfil', icon: '\u{1F464}' },
+    { path: '/solicitar', label: 'Solicitar Producto', icon: '\u{1F4E8}' },
+    { path: '/mis-solicitudes', label: 'Mis Solicitudes', icon: '\u{1F4CB}' },
+    { path: '/mis-pedidos', label: 'Mis Pedidos', icon: '\u{1F4E6}' },
+  ];
+
+  get navItems() {
+    return this.isAdmin ? this.adminNavItems : this.clienteNavItems;
+  }
+
+  ngOnInit(): void {
+    if (this.isAdmin) {
+      this.cargarNotificaciones();
+    }
+  }
+
+  private cargarNotificaciones(): void {
+    this.api.get<number>('/notificaciones/no-leidas').subscribe({
+      next: (count) => (this.notificacionesNoLeidas = count),
+    });
+  }
+
   onLogout(): void {
     this.authService.logout();
-    this.notificationService.showInfo('Sesión cerrada correctamente.');
+    this.notificationService.showInfo('Sesi\u00F3n cerrada correctamente.');
     this.router.navigate(['/auth/login']);
   }
 }

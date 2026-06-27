@@ -7,14 +7,11 @@ import { RequestOtpResponse, VerifyOtpRequest } from '../../features/auth/models
  * Interfaz que representa la respuesta del endpoint de autenticación.
  */
 export interface AuthResponse {
-  /** Token JWT de acceso */
   token: string;
-  /** Nombre del usuario */
   nombre: string;
-  /** Correo electrónico */
   email: string;
-  /** Rol del usuario (Admin, Operador, Cliente) */
   rol: string;
+  clienteId?: number;
 }
 
 /**
@@ -96,16 +93,35 @@ export class AuthService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  /**
-   * Almacena la sesión del usuario en localStorage.
-   * @param response - Respuesta de autenticación con token y datos
-   */
+  getUserData(): { nombre: string; email: string; rol: string; clienteId?: number } | null {
+    const stored = localStorage.getItem(this.USER_KEY);
+    return stored ? JSON.parse(stored) : null;
+  }
+
+  getRol(): string | null {
+    return this.getUserData()?.rol ?? null;
+  }
+
+  isAdmin(): boolean {
+    const rol = this.getRol();
+    return rol === 'Admin' || rol === 'Operador';
+  }
+
+  isCliente(): boolean {
+    return this.getRol() === 'Cliente';
+  }
+
+  getClienteId(): number | undefined {
+    return this.getUserData()?.clienteId;
+  }
+
   private setSession(response: AuthResponse): void {
     localStorage.setItem(this.TOKEN_KEY, response.token);
     localStorage.setItem(this.USER_KEY, JSON.stringify({
       nombre: response.nombre,
       email: response.email,
       rol: response.rol,
+      clienteId: response.clienteId,
     }));
   }
 }
