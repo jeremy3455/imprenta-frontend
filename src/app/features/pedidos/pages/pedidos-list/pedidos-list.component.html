@@ -1,0 +1,136 @@
+<div class="pedidos page-section">
+  <header class="pedidos__header">
+    <h1>Pedidos</h1>
+    <button class="btn btn--primary" (click)="abrirFormulario()">+ Nuevo Pedido</button>
+  </header>
+
+  @if (showForm()) {
+    <app-pedido-form (cerrar)="cerrarFormulario()" />
+  }
+
+  @if (showDetalle() && detallePedidoId()) {
+    <app-pedido-detalle [pedidoId]="detallePedidoId()!" (cerrar)="cerrarDetalle()" />
+  }
+
+  @if (showSri() && sriPedidoId()) {
+    <app-pedido-sri [pedidoId]="sriPedidoId()!" (cerrar)="cerrarSriModal()" />
+  }
+
+  <div class="pedidos__filtros">
+    <input
+      class="form-control"
+      placeholder="Buscar pedido..."
+      [(ngModel)]="search"
+      (keyup.enter)="filtrar()"
+    />
+    <select class="form-control" [(ngModel)]="filtroEstado" (change)="filtrar()">
+      @for (est of estados; track est.value) {
+        <option [value]="est.value">{{ est.label }}</option>
+      }
+    </select>
+    <select class="form-control" [(ngModel)]="filtroClienteId" (change)="filtrar()">
+      <option [value]="0">Todos los clientes</option>
+      @for (cli of clientes(); track cli.id) {
+        <option [value]="cli.id">{{ cli.razonSocial }}</option>
+      }
+    </select>
+    <select class="form-control" [(ngModel)]="filtroFormaPago" (change)="filtrar()">
+      @for (fp of formaPagoOptions; track fp.value) {
+        <option [value]="fp.value">{{ fp.label }}</option>
+      }
+    </select>
+    <input
+      class="form-control"
+      type="date"
+      [(ngModel)]="fechaDesde"
+      (change)="filtrar()"
+      placeholder="Fecha desde"
+    />
+    <input
+      class="form-control"
+      type="date"
+      [(ngModel)]="fechaHasta"
+      (change)="filtrar()"
+      placeholder="Fecha hasta"
+    />
+  </div>
+
+  <div class="pedidos__table-wrapper table-wrapper">
+    @if (loading()) {
+      <div class="pedidos__loading page-loading">
+        <p>Cargando pedidos...</p>
+      </div>
+    } @else if (pedidos().length === 0) {
+      <app-empty-state
+        icon="📋"
+        title="No hay pedidos registrados"
+        message="Comienza creando tu primer pedido para un cliente."
+      />
+    } @else {
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Estado</th>
+            <th>Pago</th>
+            <th>Monto Total</th>
+            <th>Pendiente</th>
+            <th>Items</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pedido of pedidos(); track pedido.id) {
+            <tr>
+              <td>{{ pedido.id }}</td>
+              <td>{{ pedido.razonSocialCliente }}</td>
+              <td>
+                <span class="badge {{ classEstado(pedido.estado) }}">
+                  {{ labelEstado(pedido.estado) }}
+                </span>
+              </td>
+              <td>{{ pedido.formaPago === 'CREDITO' ? 'Crédito' : 'Contado' }}</td>
+              <td>{{ formatearMonto(pedido.montoTotal) }}</td>
+              <td>{{ formatearMonto(pedido.montoPendiente) }}</td>
+              <td>{{ pedido.cantidadItems }}</td>
+              <td>{{ pedido.fechaRegistro | date:'shortDate' }}</td>
+              <td>
+                @if (pedido.estado === 'EnEsperaDatos') {
+                  <button class="btn btn--sm btn--icon btn--sri" (click)="abrirSriModal(pedido.id)" title="Completar datos SRI">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                  </button>
+                }
+                <button class="btn btn--sm btn--icon" (click)="verDetalle(pedido.id)" title="Ver detalle">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+                @if (pedido.estado === 'Ingresado' || pedido.estado === 'Aprobado' || pedido.estado === 'EnEsperaDatos') {
+                  <button class="btn btn--danger btn--sm" (click)="anularPedido(pedido)" title="Anular pedido">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (totalPages > 1) {
+        <div class="pagination">
+          <button class="btn btn--sm" [disabled]="page <= 1" (click)="cambiarPagina(page - 1)">Anterior</button>
+          @for (p of paginas; track p) {
+            <button class="btn btn--sm" [class.btn--primary]="p === page" (click)="cambiarPagina(p)">{{ p }}</button>
+          }
+          <button class="btn btn--sm" [disabled]="page >= totalPages" (click)="cambiarPagina(page + 1)">Siguiente</button>
+        </div>
+      }
+    }
+  </div>
+</div>

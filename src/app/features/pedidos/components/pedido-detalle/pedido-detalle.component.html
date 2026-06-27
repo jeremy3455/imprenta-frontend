@@ -1,0 +1,130 @@
+<div class="modal-overlay" (click)="cerrar.emit()">
+  <div class="modal-dialog modal-dialog--detalle" (click)="$event.stopPropagation()">
+    <div class="modal-dialog__header">
+      <h2>Pedido #{{ pedidoId() }}</h2>
+      <button class="modal-dialog__close" (click)="cerrar.emit()" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-dialog__body">
+      @if (loading()) {
+        <div class="page-loading"><p>Cargando detalle...</p></div>
+      } @else if (pedido(); as p) {
+        <!-- Info general -->
+        <div class="detalle-info">
+          <div class="detalle-info__grid">
+            <div class="detalle-info__item">
+              <span class="detalle-info__label">Cliente</span>
+              <span class="detalle-info__value">{{ p.razonSocialCliente }}</span>
+            </div>
+            <div class="detalle-info__item">
+              <span class="detalle-info__label">RUC/Cédula</span>
+              <span class="detalle-info__value">{{ p.numeroCedulaRuc }}</span>
+            </div>
+            <div class="detalle-info__item">
+              <span class="detalle-info__label">Estado</span>
+              <span class="badge {{ classEstado(p.estado) }}">{{ labelEstado(p.estado) }}</span>
+            </div>
+            <div class="detalle-info__item">
+              <span class="detalle-info__label">Forma de Pago</span>
+              <span class="detalle-info__value">{{ p.formaPago === 'CREDITO' ? 'Crédito' : 'Contado' }}</span>
+            </div>
+            <div class="detalle-info__item">
+              <span class="detalle-info__label">Monto Total</span>
+              <span class="detalle-info__value">{{ formatearMonto(p.montoTotal) }}</span>
+            </div>
+            <div class="detalle-info__item">
+              <span class="detalle-info__label">Anticipo</span>
+              <span class="detalle-info__value">{{ formatearMonto(p.montoAnticipo) }}</span>
+            </div>
+            <div class="detalle-info__item">
+              <span class="detalle-info__label">Pendiente</span>
+              <span class="detalle-info__value">{{ formatearMonto(p.montoPendiente) }}</span>
+            </div>
+            @if (p.fechaVencimientoCredito) {
+              <div class="detalle-info__item">
+                <span class="detalle-info__label">Vencimiento</span>
+                <span class="detalle-info__value">{{ p.fechaVencimientoCredito | date:'shortDate' }}</span>
+              </div>
+            }
+            <div class="detalle-info__item">
+              <span class="detalle-info__label">Registro</span>
+              <span class="detalle-info__value">{{ p.fechaRegistro | date:'shortDate' }}</span>
+            </div>
+            @if (p.observaciones) {
+              <div class="detalle-info__item detalle-info__item--full">
+                <span class="detalle-info__label">Observaciones</span>
+                <span class="detalle-info__value">{{ p.observaciones }}</span>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline">
+          <h3>Progreso</h3>
+          <div class="timeline__steps">
+            <div class="timeline__step" [class.timeline__step--active]="p.fechaAprobacion">
+              <span class="timeline__dot"></span>
+              <div>
+                <strong>Aprobado</strong>
+                @if (p.fechaAprobacion) {
+                  <span class="timeline__date">{{ p.fechaAprobacion | date:'shortDate' }}</span>
+                }
+              </div>
+            </div>
+            <div class="timeline__step" [class.timeline__step--active]="p.fechaInicioProduccion">
+              <span class="timeline__dot"></span>
+              <div>
+                <strong>En Producción</strong>
+                @if (p.fechaInicioProduccion) {
+                  <span class="timeline__date">{{ p.fechaInicioProduccion | date:'shortDate' }}</span>
+                }
+              </div>
+            </div>
+            <div class="timeline__step" [class.timeline__step--active]="p.fechaListoEntrega">
+              <span class="timeline__dot"></span>
+              <div>
+                <strong>Listo para Entrega</strong>
+                @if (p.fechaListoEntrega) {
+                  <span class="timeline__date">{{ p.fechaListoEntrega | date:'shortDate' }}</span>
+                }
+              </div>
+            </div>
+            <div class="timeline__step" [class.timeline__step--active]="p.fechaEntrega">
+              <span class="timeline__dot"></span>
+              <div>
+                <strong>Entregado</strong>
+                @if (p.fechaEntrega) {
+                  <span class="timeline__date">{{ p.fechaEntrega | date:'shortDate' }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones centradas -->
+        <div class="detalle-acciones">
+          @if (p.estado === 'Ingresado' || p.estado === 'EnEsperaDatos') {
+            <button class="btn btn--primary" (click)="cambiarEstado('aprobar', 'Aprobar')">Aprobar</button>
+          }
+          @if (p.estado === 'Aprobado') {
+            <button class="btn btn--primary" (click)="cambiarEstado('iniciar-produccion', 'Iniciar Producción')">Iniciar Producción</button>
+          }
+          @if (p.estado === 'EnProduccion') {
+            <button class="btn btn--primary" (click)="cambiarEstado('listo-entrega', 'Marcar Listo para Entrega')">Marcar Listo</button>
+          }
+          @if (p.estado === 'ListoEntrega') {
+            <button class="btn btn--primary" (click)="cambiarEstado('entregar', 'Entregar')">Entregar</button>
+          }
+          @if (p.estado !== 'Entregado' && p.estado !== 'Anulado' && p.estado !== 'EnProduccion' && p.estado !== 'ListoEntrega') {
+            <button class="btn btn--danger" (click)="anularPedido()">Anular</button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

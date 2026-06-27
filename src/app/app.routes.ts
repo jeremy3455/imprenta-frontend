@@ -52,6 +52,20 @@ export const routes: Routes = [
           ).then((m) => m.ClientesListComponent),
       },
       {
+        path: 'productos',
+        loadComponent: () =>
+          import(
+            './features/productos/pages/productos-list/productos-list.component'
+          ).then((m) => m.ProductosListComponent),
+      },
+      {
+        path: 'pedidos',
+        loadComponent: () =>
+          import(
+            './features/pedidos/pages/pedidos-list/pedidos-list.component'
+          ).then((m) => m.PedidosListComponent),
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',

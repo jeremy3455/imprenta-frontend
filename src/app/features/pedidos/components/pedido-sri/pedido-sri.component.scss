@@ -1,0 +1,37 @@
+.modal-dialog--sri {
+  width: min(600px, calc(100vw - 2rem));
+}
+
+.sri-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 2rem 0;
+}
+
+.sri-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  &--completo {
+    border-color: var(--color-success);
+    background: color-mix(in srgb, var(--color-success) 5%, transparent);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.sri-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}

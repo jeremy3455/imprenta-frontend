@@ -1,0 +1,156 @@
+<div class="modal-overlay" (click)="cerrar.emit()">
+  <div class="modal-dialog modal-dialog--wide" (click)="$event.stopPropagation()">
+    <div class="modal-dialog__header">
+      <h2>Nuevo Pedido</h2>
+      <button class="modal-dialog__close" (click)="cerrar.emit()" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-dialog__body">
+      <!-- Datos del pedido -->
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="ped-cliente">Cliente *</label>
+          <select id="ped-cliente" [(ngModel)]="clienteId">
+            <option [value]="0">Selecciona un cliente</option>
+            @for (cli of clientes(); track cli.id) {
+              <option [value]="cli.id">{{ cli.razonSocial }} ({{ cli.numeroCedulaRuc }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="ped-forma-pago">Forma de Pago *</label>
+          <select id="ped-forma-pago" [(ngModel)]="formaPago">
+            <option value="CONTADO">Contado</option>
+            <option value="CREDITO">Crédito</option>
+          </select>
+        </div>
+
+        @if (formaPago === 'CREDITO') {
+          <div class="form-field">
+            <label for="ped-anticipo">Monto Anticipo</label>
+            <input
+              id="ped-anticipo"
+              type="number"
+              step="0.01"
+              min="0"
+              [(ngModel)]="montoAnticipo"
+              placeholder="0.00"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="ped-vencimiento">Fecha Vencimiento</label>
+            <input
+              id="ped-vencimiento"
+              type="date"
+              [(ngModel)]="fechaVencimientoCredito"
+            />
+          </div>
+        }
+
+        <div class="form-field form-field--full">
+          <label for="ped-observaciones">Observaciones</label>
+          <textarea
+            id="ped-observaciones"
+            [(ngModel)]="observaciones"
+            placeholder="Observaciones opcionales"
+            rows="2"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Líneas de detalle -->
+      <div class="detalle-section">
+        <h3>Productos</h3>
+
+        <div class="detalle-section__add-row">
+          <div class="detalle-section__field">
+            <label>Producto</label>
+            <select [(ngModel)]="productoSeleccionadoId" (change)="onProductoChange()">
+              <option [ngValue]="0">Selecciona un producto</option>
+              @for (prod of productos(); track prod.id) {
+                <option [ngValue]="prod.id">{{ prod.nombre }} - {{ prod.categoriaNombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="detalle-section__field detalle-section__field--sm">
+            <label>Cantidad</label>
+            <input
+              type="number"
+              min="1"
+              [(ngModel)]="cantidadItem"
+              placeholder="0"
+              class="input-sm"
+            />
+          </div>
+          <div class="detalle-section__field detalle-section__field--sm">
+            <label>Precio Unit.</label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              [(ngModel)]="precioItem"
+              placeholder="0.00"
+              class="input-sm"
+            />
+          </div>
+          <button class="btn btn--primary btn--sm btn--add" (click)="agregarLinea()">Agregar</button>
+        </div>
+
+        @if (lineas().length > 0) {
+          <table class="table detalle-section__table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cant.</th>
+                <th>Precio Unit.</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (linea of lineas(); track linea.productoId) {
+                <tr>
+                  <td>{{ linea.nombreProducto }}</td>
+                  <td>{{ linea.cantidad }}</td>
+                  <td>${{ linea.precioUnitario.toFixed(2) }}</td>
+                  <td>${{ (linea.cantidad * linea.precioUnitario).toFixed(2) }}</td>
+                  <td>
+                    <button class="btn btn--danger btn--sm" (click)="quitarLinea(linea.productoId)" title="Quitar">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                <td><strong>${{ montoTotal.toFixed(2) }}</strong></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        }
+      </div>
+    </div>
+
+    <div class="modal-dialog__footer">
+      <button class="btn btn--secondary" (click)="cerrar.emit()" type="button" [disabled]="guardando()">Cancelar</button>
+      <button class="btn btn--primary" (click)="guardar()" type="button" [disabled]="guardando()">
+        @if (guardando()) {
+          Guardando...
+        } @else {
+          Crear Pedido
+        }
+      </button>
+    </div>
+  </div>
+</div>

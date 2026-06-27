@@ -1,0 +1,72 @@
+.cliente-form h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+
+  input {
+    flex: 1;
+  }
+}
+
+.sri-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--brand-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.sri-success {
+  color: #2e7d32;
+  font-size: 0.9rem;
+}
+
+.sri-error {
+  color: #c62828;
+  font-size: 0.9rem;
+}
+
+.sri-data {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--brand-primary, #1976d2) 6%, transparent);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.badge--sri {
+  background: var(--brand-primary, #1976d2);
+  color: #fff;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}

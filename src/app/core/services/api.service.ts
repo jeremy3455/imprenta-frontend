@@ -49,6 +49,10 @@ export class ApiService {
    * @param endpoint - Ruta relativa del recurso a eliminar
    * @returns Observable con la respuesta tipada como T
    */
+  patch<T>(endpoint: string, data: unknown): Observable<T> {
+    return this.http.patch<T>(`${this.baseUrl}${endpoint}`, data);
+  }
+
   delete<T>(endpoint: string): Observable<T> {
     return this.http.delete<T>(`${this.baseUrl}${endpoint}`);
   }

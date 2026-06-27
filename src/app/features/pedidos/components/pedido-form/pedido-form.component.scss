@@ -1,0 +1,57 @@
+.modal-dialog--wide {
+  width: min(720px, calc(100vw - 2rem));
+}
+
+.detalle-section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+
+  h3 {
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  &__add-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    flex: 1;
+    min-width: 140px;
+
+    label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+    }
+
+    &--sm {
+      flex: 0 0 100px;
+      min-width: 80px;
+    }
+  }
+
+  &__table {
+    th, td {
+      padding: 0.5rem 0.75rem;
+    }
+  }
+}
+
+.btn--add {
+  height: 40px;
+  align-self: flex-end;
+}
+
+.text-right {
+  text-align: right;
+}

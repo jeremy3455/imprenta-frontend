@@ -1,0 +1,75 @@
+<div class="modal-overlay" (click)="cerrar.emit()">
+  <div class="modal-dialog modal-dialog--sri" (click)="$event.stopPropagation()">
+    <div class="modal-dialog__header">
+      <h2>Completar Datos SRI — Pedido #{{ pedidoId() }}</h2>
+      <button class="modal-dialog__close" (click)="cerrar.emit()" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-dialog__body">
+      @if (loading()) {
+        <div class="page-loading"><p>Cargando...</p></div>
+      } @else if (pedido(); as p) {
+        @if (p.detalles.filter(d => d.esDocumentoTributario).length === 0) {
+          <p class="sri-empty">No hay productos con documento tributario en este pedido.</p>
+        } @else {
+          @for (det of p.detalles; track det.id) {
+            @if (det.esDocumentoTributario) {
+              <div class="sri-item" [class.sri-item--completo]="det.datosCompletos">
+                <div class="sri-item__header">
+                  <strong>{{ det.nombreProducto }}</strong>
+                  <span class="badge" [class.badge--active]="det.datosCompletos">
+                    {{ det.datosCompletos ? 'Completo' : 'Pendiente' }}
+                  </span>
+                </div>
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label>N° Autorización SRI</label>
+                    <input type="text" [(ngModel)]="sriData.get(det.id)!.numeroAutorizacionSri" placeholder="Número de autorización" />
+                  </div>
+                  <div class="form-field">
+                    <label>Serie Principal</label>
+                    <input type="text" [(ngModel)]="sriData.get(det.id)!.seriePrincipal" placeholder="001" maxlength="3" />
+                  </div>
+                  <div class="form-field">
+                    <label>Serie Secundaria</label>
+                    <input type="text" [(ngModel)]="sriData.get(det.id)!.serieSecundaria" placeholder="001" maxlength="3" />
+                  </div>
+                  <div class="form-field">
+                    <label>Secuencial Desde</label>
+                    <input type="number" min="1" [(ngModel)]="sriData.get(det.id)!.secuencialDesde" placeholder="1" />
+                  </div>
+                  <div class="form-field">
+                    <label>Secuencial Hasta</label>
+                    <input type="number" min="1" [(ngModel)]="sriData.get(det.id)!.secuencialHasta" placeholder="1" />
+                  </div>
+                </div>
+              </div>
+            }
+          }
+
+          <div class="sri-info">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <span>Al guardar todos los datos, el pedido se aprobará automáticamente.</span>
+          </div>
+        }
+      }
+    </div>
+
+    <div class="modal-dialog__footer">
+      <button class="btn btn--secondary" (click)="cerrar.emit()" [disabled]="guardando()">Cancelar</button>
+      <button class="btn btn--primary" (click)="guardarTodo()" [disabled]="guardando()">
+        @if (guardando()) {
+          Guardando...
+        } @else {
+          Guardar y Aprobar
+        }
+      </button>
+    </div>
+  </div>
+</div>

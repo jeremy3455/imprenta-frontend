@@ -2,14 +2,20 @@
   @for (notification of notifications(); track notification.id) {
     <div
       class="notification notification--{{ notification.type }}"
+      [class.notification--dismissing]="isDismissing(notification.id)"
       role="alert"
     >
       <div class="notification__icon" aria-hidden="true">
-        {{ getIcon(notification.type) }}
+        <span [innerHTML]="getMeta(notification.type).icon"></span>
       </div>
 
       <div class="notification__body">
-        <p class="notification__title">{{ getTitle(notification) }}</p>
+        <div class="notification__header">
+          <span class="notification__title">{{ getTitle(notification) }}</span>
+          <span class="notification__badge notification__badge--{{ notification.type }}">
+            {{ getMeta(notification.type).label }}
+          </span>
+        </div>
         <p class="notification__message">{{ notification.message }}</p>
       </div>
 
@@ -19,8 +25,14 @@
         (click)="dismiss(notification.id)"
         aria-label="Cerrar notificación"
       >
-        ×
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+        </svg>
       </button>
+
+      <div class="notification__progress" aria-hidden="true">
+        <div class="notification__progress-bar"></div>
+      </div>
     </div>
   }
 </aside>

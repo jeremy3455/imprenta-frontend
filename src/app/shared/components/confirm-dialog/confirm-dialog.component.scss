@@ -1,0 +1,89 @@
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--color-sidebar-bg) 45%, transparent);
+  animation: confirm-fade-in 0.15s ease-out;
+}
+
+.confirm-dialog {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  width: min(400px, calc(100vw - 2rem));
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  animation: confirm-scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &__icon {
+    margin-bottom: 0.75rem;
+    color: var(--color-info);
+  }
+
+  &--danger &__icon {
+    color: var(--color-error);
+  }
+
+  &__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__message {
+    margin: 0 0 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  &__input {
+    margin-bottom: 1.25rem;
+    text-align: left;
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      background: var(--color-bg);
+      color: var(--color-text);
+      outline: none;
+      box-sizing: border-box;
+
+      &:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 20%, transparent);
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+}
+
+@keyframes confirm-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes confirm-scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}

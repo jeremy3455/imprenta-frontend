@@ -1,0 +1,108 @@
+<div class="productos page-section">
+  <header class="productos__header">
+    <h1>Productos</h1>
+    <button class="btn btn--primary" (click)="abrirFormulario()">+ Nuevo Producto</button>
+  </header>
+
+  @if (showForm()) {
+    <app-producto-form
+      [producto]="editingProducto()"
+      [categorias]="categorias()"
+      (cerrar)="cerrarFormulario()"
+    />
+  }
+
+  <div class="productos__filtros">
+    <input
+      class="form-control"
+      placeholder="Buscar producto..."
+      [(ngModel)]="search"
+      (keyup.enter)="filtrar()"
+    />
+    <select class="form-control" [(ngModel)]="filtroCategoriaId" (change)="filtrar()">
+      <option [value]="0">Todas las categorías</option>
+      @for (cat of categorias(); track cat.id) {
+        <option [value]="cat.id">{{ cat.nombre }}</option>
+      }
+    </select>
+    <select class="form-control" [(ngModel)]="filtroEstado" (change)="filtrar()">
+      <option [value]="''">Todos los estados</option>
+      <option [value]="true">Activos</option>
+      <option [value]="false">Inactivos</option>
+    </select>
+  </div>
+
+  <div class="productos__table-wrapper table-wrapper">
+    @if (loading()) {
+      <div class="productos__loading page-loading">
+        <p>Cargando productos...</p>
+      </div>
+    } @else if (productos().length === 0) {
+      <app-empty-state
+        icon="📦"
+        title="No hay productos registrados"
+        message="Comienza agregando tu primer producto para gestionar tus pedidos."
+      />
+    } @else {
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Doc. Tributario</th>
+            <th>Tipo Contribuyente</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (producto of productos(); track producto.id) {
+            <tr>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.categoriaNombre }}</td>
+              <td>{{ formatearPrecio(producto.precioUnitario) }}</td>
+              <td>
+                <span class="badge" [class.badge--active]="producto.esDocumentoTributario">
+                  {{ producto.esDocumentoTributario ? 'Sí' : 'No' }}
+                </span>
+              </td>
+              <td>
+                @if (producto.tipoContribuyenteAplicable) {
+                  <span class="badge">{{ producto.tipoContribuyenteAplicable }}</span>
+                }
+              </td>
+              <td>
+                <span class="badge" [class.badge--active]="producto.estado">
+                  {{ producto.estado ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn--sm btn--icon" (click)="editarProducto(producto)" title="Editar producto">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                  </svg>
+                </button>
+                <button class="btn btn--danger btn--sm" (click)="deleteProducto(producto.id)" title="Eliminar producto">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (totalPages > 1) {
+        <div class="pagination">
+          <button class="btn btn--sm" [disabled]="page <= 1" (click)="cambiarPagina(page - 1)">Anterior</button>
+          @for (p of paginas; track p) {
+            <button class="btn btn--sm" [class.btn--primary]="p === page" (click)="cambiarPagina(p)">{{ p }}</button>
+          }
+          <button class="btn btn--sm" [disabled]="page >= totalPages" (click)="cambiarPagina(page + 1)">Siguiente</button>
+        </div>
+      }
+    }
+  </div>
+</div>

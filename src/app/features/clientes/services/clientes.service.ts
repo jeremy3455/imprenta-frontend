@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../../core/services/api.service';
-import { Cliente, CreateClienteRequest, UpdateClienteRequest } from '../models/cliente.model';
+import { Cliente, CreateClienteRequest, UpdateClienteRequest, SriConsultaResponse } from '../models/cliente.model';
 
-/**
- * Servicio que maneja las operaciones CRUD de clientes contra la API.
- */
 @Injectable({
   providedIn: 'root',
 })
@@ -14,47 +11,27 @@ export class ClientesService {
 
   constructor(private readonly api: ApiService) {}
 
-  /**
-   * Obtiene todos los clientes activos.
-   * @returns Observable con la lista de clientes
-   */
-  getAll(): Observable<Cliente[]> {
-    return this.api.get<Cliente[]>(this.endpoint);
+  getAll(estado?: boolean): Observable<Cliente[]> {
+    const params = estado !== undefined ? `?estado=${estado}` : '';
+    return this.api.get<Cliente[]>(`${this.endpoint}${params}`);
   }
 
-  /**
-   * Obtiene un cliente por su Id.
-   * @param id - Identificador único del cliente
-   * @returns Observable con el cliente encontrado
-   */
   getById(id: number): Observable<Cliente> {
     return this.api.get<Cliente>(`${this.endpoint}/${id}`);
   }
 
-  /**
-   * Crea un nuevo cliente.
-   * @param data - Datos del cliente a crear
-   * @returns Observable con el cliente creado
-   */
+  consultarSri(numero: string): Observable<SriConsultaResponse> {
+    return this.api.get<SriConsultaResponse>(`${this.endpoint}/sri/${numero}`);
+  }
+
   create(data: CreateClienteRequest): Observable<Cliente> {
     return this.api.post<Cliente>(this.endpoint, data);
   }
 
-  /**
-   * Actualiza un cliente existente.
-   * @param id - Id del cliente a actualizar
-   * @param data - Nuevos datos del cliente
-   * @returns Observable con el cliente actualizado
-   */
   update(id: number, data: UpdateClienteRequest): Observable<Cliente> {
     return this.api.put<Cliente>(`${this.endpoint}/${id}`, data);
   }
 
-  /**
-   * Elimina (soft delete) un cliente por su Id.
-   * @param id - Id del cliente a eliminar
-   * @returns Observable vacío
-   */
   delete(id: number): Observable<void> {
     return this.api.delete<void>(`${this.endpoint}/${id}`);
   }

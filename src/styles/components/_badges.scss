@@ -11,4 +11,39 @@
     background: var(--brand-accent-pastel);
     color: var(--color-success-text);
   }
+
+  &--ingresado {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  &--aprobado {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  &--en-produccion {
+    background: #e0e7ff;
+    color: #3730a3;
+  }
+
+  &--listo-entrega {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  &--entregado {
+    background: #a7f3d0;
+    color: #064e3b;
+  }
+
+  &--anulado {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  &--espera-datos {
+    background: #fef3c7;
+    color: #92400e;
+  }
 }

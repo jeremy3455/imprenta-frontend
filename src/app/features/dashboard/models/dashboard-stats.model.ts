@@ -1,13 +1,28 @@
-/**
- * Interfaz que representa las estadísticas resumidas del dashboard.
- */
+export interface DashboardCliente {
+  id: number;
+  razonSocial: string;
+  numeroCedulaRuc: string;
+}
+
+export interface DashboardPedido {
+  id: number;
+  razonSocialCliente: string;
+  estado: string;
+  montoTotal: number;
+}
+
+export interface DashboardProducto {
+  id: number;
+  nombre: string;
+  categoriaNombre: string;
+}
+
 export interface DashboardStats {
-  /** Cantidad total de clientes activos */
   totalClientes: number;
-  /** Cantidad total de pedidos */
   totalPedidos: number;
-  /** Cantidad total de productos */
   totalProductos: number;
-  /** Cantidad de pedidos pendientes */
   pendientes: number;
+  ultimosClientes: DashboardCliente[];
+  ultimosPedidos: DashboardPedido[];
+  ultimosProductos: DashboardProducto[];
 }

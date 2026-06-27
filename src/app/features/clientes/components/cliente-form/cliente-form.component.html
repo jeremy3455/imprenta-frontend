@@ -1,0 +1,85 @@
+<div class="cliente-form card">
+  <h2>{{ editando() ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+
+  <form (ngSubmit)="guardar()" class="form-grid">
+    <div class="form-field">
+      <label for="numeroCedulaRuc">Cédula / RUC *</label>
+      <div class="input-group">
+        <input
+          id="numeroCedulaRuc"
+          name="numeroCedulaRuc"
+          class="form-control"
+          [value]="numeroCedulaRuc"
+          (input)="onNumeroChange($any($event.target).value)"
+          placeholder="10 o 13 dígitos"
+          maxlength="13"
+          required
+        />
+        <button
+          type="button"
+          class="btn btn--primary btn--sm"
+          [disabled]="consultandoSri() || (numeroCedulaRuc.length !== 10 && numeroCedulaRuc.length !== 13)"
+          (click)="buscarSri()"
+        >
+          @if (consultandoSri()) {
+            Buscando...
+          } @else {
+            Buscar en SRI
+          }
+        </button>
+      </div>
+    </div>
+
+    @if (consultandoSri()) {
+      <div class="form-field form-field--full sri-loading">
+        <span class="spinner"></span> Consultando al SRI...
+      </div>
+    }
+
+    @if (datosSri(); as sri) {
+      <div class="form-field form-field--full sri-data">
+        <strong>Datos obtenidos del SRI:</strong>
+        @if (sri.tipoContribuyente) {
+          <span class="badge badge--sri">{{ sri.tipoContribuyente }}</span>
+        }
+      </div>
+    }
+
+    <div class="form-field">
+      <label for="razonSocial">Razón Social *</label>
+      <input id="razonSocial" name="razonSocial" class="form-control" [(ngModel)]="razonSocial" required />
+    </div>
+
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" class="form-control" [(ngModel)]="email" />
+    </div>
+
+    <div class="form-field">
+      <label for="telefono">Teléfono</label>
+      <input id="telefono" name="telefono" class="form-control" [(ngModel)]="telefono" />
+    </div>
+
+    <div class="form-field form-field--full">
+      <label for="direccion">Dirección</label>
+      <input id="direccion" name="direccion" class="form-control" [(ngModel)]="direccion" />
+    </div>
+
+    <div class="form-field form-field--full">
+      <label for="tipoContribuyente">Tipo Contribuyente</label>
+      <input id="tipoContribuyente" name="tipoContribuyente" class="form-control" [(ngModel)]="tipoContribuyente" placeholder="Persona Natural / Sociedad" />
+    </div>
+
+    <div class="form-field">
+      <label class="toggle-label">
+        <input type="checkbox" [(ngModel)]="estado" name="estado" />
+        <span>Cliente activo</span>
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn--primary">Guardar</button>
+      <button type="button" class="btn btn--secondary" (click)="cerrar.emit()">Cancelar</button>
+    </div>
+  </form>
+</div>

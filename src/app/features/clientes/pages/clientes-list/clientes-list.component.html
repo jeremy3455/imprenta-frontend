@@ -1,49 +1,19 @@
 <div class="clientes page-section">
   <header class="clientes__header">
     <h1>Clientes</h1>
-    <button class="btn btn--primary" (click)="toggleCreateForm()">
-      {{ showCreateForm ? 'Cancelar' : '+ Nuevo Cliente' }}
-    </button>
+    <button class="btn btn--primary" (click)="abrirFormulario()">+ Nuevo Cliente</button>
   </header>
 
-  @if (showCreateForm) {
-    <div class="clientes__form card">
-      <h2>Nuevo Cliente</h2>
-      <form (ngSubmit)="createCliente()" class="form-grid">
-        <div class="form-field">
-          <label for="ruc">RUC *</label>
-          <input id="ruc" name="ruc" [(ngModel)]="nuevoCliente.ruc" required placeholder="1234567890001" />
-        </div>
-        <div class="form-field">
-          <label for="razonSocial">Razón Social *</label>
-          <input id="razonSocial" name="razonSocial" [(ngModel)]="nuevoCliente.razonSocial" required />
-        </div>
-        <div class="form-field">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" [(ngModel)]="nuevoCliente.email" />
-        </div>
-        <div class="form-field">
-          <label for="telefono">Teléfono</label>
-          <input id="telefono" name="telefono" [(ngModel)]="nuevoCliente.telefono" />
-        </div>
-        <div class="form-field form-field--full">
-          <label for="direccion">Dirección</label>
-          <input id="direccion" name="direccion" [(ngModel)]="nuevoCliente.direccion" />
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn--primary">Guardar</button>
-          <button type="button" class="btn btn--secondary" (click)="toggleCreateForm()">Cancelar</button>
-        </div>
-      </form>
-    </div>
+  @if (showForm()) {
+    <app-cliente-form [cliente]="editingCliente()" (cerrar)="cerrarFormulario()" />
   }
 
   <div class="clientes__table-wrapper table-wrapper">
-    @if (loading) {
+    @if (loading()) {
       <div class="clientes__loading page-loading">
         <p>Cargando clientes...</p>
       </div>
-    } @else if (clientes.length === 0) {
+    } @else if (clientes().length === 0) {
       <app-empty-state
         icon="👥"
         title="No hay clientes registrados"
@@ -53,33 +23,43 @@
       <table class="table">
         <thead>
           <tr>
-            <th>RUC</th>
+            <th>Cédula / RUC</th>
             <th>Razón Social</th>
             <th>Email</th>
             <th>Teléfono</th>
+            <th>Tipo</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          @for (cliente of clientes; track cliente.id) {
+          @for (cliente of clientes(); track cliente.id) {
             <tr>
-              <td>{{ cliente.ruc }}</td>
+              <td>{{ cliente.numeroCedulaRuc }}</td>
               <td>{{ cliente.razonSocial }}</td>
               <td>{{ cliente.email }}</td>
               <td>{{ cliente.telefono }}</td>
               <td>
-                <span class="badge" [class.badge--active]="cliente.activo"
-                  >{{ cliente.activo ? 'Activo' : 'Inactivo' }}</span
-                >
+                @if (cliente.tipoContribuyente) {
+                  <span class="badge">{{ cliente.tipoContribuyente }}</span>
+                }
               </td>
               <td>
-                <button
-                  class="btn btn--danger btn--sm"
-                  (click)="deleteCliente(cliente.id)"
-                  title="Eliminar cliente"
-                >
-                  🗑️
+                <span class="badge" [class.badge--active]="cliente.estado">
+                  {{ cliente.estado ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn--sm btn--icon" (click)="editarCliente(cliente)" title="Editar cliente">
+                  <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                    <path d="m5.433 13.917-1.35 1.35a.5.5 0 0 0 .65.65l1.35-1.35a2 2 0 0 1-.65-.65Zm1.061.353 5.38-5.38a2 2 0 0 0-.707-.707l-5.38 5.38c.18.27.414.505.707.707Zm6.797-8.91a1.12 1.12 0 0 0-1.582 0l-.53.53c.18.27.414.505.707.707l.53-.53a1.12 1.12 0 0 0 .875-1.87v-1.06a.31.31 0 0 0 .443 0l.53-.53a.31.31 0 0 0 0-.443Z"/>
+                    <path d="M14.5 8.5V14a1.5 1.5 0 0 1-1.5 1.5H4A1.5 1.5 0 0 1 2.5 14V5A1.5 1.5 0 0 1 4 3.5h6.5v1H4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V8.5h1.5Z"/>
+                  </svg>
+                </button>
+                <button class="btn btn--danger btn--sm" (click)="deleteCliente(cliente.id)" title="Eliminar cliente">
+                  <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                    <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 1 .823.67l.5 5.5a.75.75 0 1 1-1.49.136l-.5-5.5a.75.75 0 0 1 .667-.806Zm2.83.002a.75.75 0 0 1 .666.804l-.5 5.5a.75.75 0 1 1-1.49-.136l.5-5.5a.75.75 0 0 1 .824-.668Z" clip-rule="evenodd"/>
+                  </svg>
                 </button>
               </td>
             </tr>

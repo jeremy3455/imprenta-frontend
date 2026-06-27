@@ -20,7 +20,7 @@ export class EmptyStateComponent {
   /** Ícono decorativo que representa el estado vacío */
   readonly icon = input<string>('📂');
 
-  /** Título principal del estado vacío */
+  /** Título principal del estado vacío */  
   readonly title = input<string>('Sin datos');
 
   /** Mensaje descriptivo adicional */
